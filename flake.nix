@@ -35,7 +35,13 @@
                                                                                         runtimeInputs =
                                                                                             [
                                                                                                 ( config.failure { } )
-                                                                                                ( config.sequential { sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
+                                                                                                (
+                                                                                                    config.sequential
+                                                                                                        {
+                                                                                                            sequential-file = sequential-file ;
+                                                                                                            sequential-lock = sequential-lock ;
+                                                                                                        }
+                                                                                                )
                                                                                                 pkgs.coreutils
                                                                                             ] ;
                                                                                         text =
@@ -99,7 +105,7 @@
                                                                                                         runtimeInputs =
                                                                                                             [
                                                                                                                 ( config.failure { } )
-                                                                                                                ( config.gc-root { gc-roots-dir = gc-roots-dir ; sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
+                                                                                                                ( config.gc-root { gc-roots-dir = gc-roots-dir ; sequential-file = "/build/sequential.asc" ; sequential-lock = "/build/sequential.lock" ; } )
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
