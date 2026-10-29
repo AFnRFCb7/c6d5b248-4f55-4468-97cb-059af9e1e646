@@ -102,7 +102,7 @@
                                                                                                         runtimeInputs =
                                                                                                             [
                                                                                                                 ( config.failure { } )
-                                                                                                                config.gc-root
+                                                                                                                ( config.gc-root { gc-roots-dir = gc-roots-dir ; sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
