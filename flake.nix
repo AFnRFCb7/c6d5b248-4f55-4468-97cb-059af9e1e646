@@ -47,7 +47,7 @@
                                                                                         text =
                                                                                             ''
                                                                                                 TARGET="$1"
-                                                                                                mkdir --parents /mounts/gc-root/$INDEX"
+                                                                                                mkdir --parents "/mounts/gc-root/$INDEX"
                                                                                                 SEQUENCE="$( sequential )" failure 8686853400084478
                                                                                                 ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
                                                                                             '' ;
@@ -109,7 +109,8 @@
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
-                                                                                                                gc-root ${ builtins.toString index } "${ target }"
+                                                                                                                export INDEX=${ builtins.toString index }
+                                                                                                                gc-root "${ target }"
                                                                                                                 if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected } ]]
                                                                                                                 then
                                                                                                                     failure 4155997642417285
