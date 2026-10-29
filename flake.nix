@@ -109,7 +109,7 @@
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
-                                                                                                                export INDEX=${ builtins.toString index }
+                                                                                                                export INDEX=${ lib.fixedWidthString 16 "0" ( builtins.toString index ) }
                                                                                                                 gc-root "${ target }"
                                                                                                                 if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected } ]]
                                                                                                                 then
