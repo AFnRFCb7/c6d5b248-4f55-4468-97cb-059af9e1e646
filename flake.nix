@@ -49,7 +49,7 @@
                                                                                                 ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
                                                                                             '' ;
                                                                                     } ;
-                                                                        type = lib.types.package ;
+                                                                        type = lib.types.functionTo lib.types.package ;
                                                                     } ;
                                                         } ;
                                                 } ;
