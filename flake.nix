@@ -29,21 +29,23 @@
                                                                                 sequential-file ,
                                                                                 sequential-lock
                                                                             } :
-                                                                                pkgs.writeShellApplication
+                                                                                config.lazy-shell-application
                                                                                     {
+                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" } ; } ;
                                                                                         name = "gc-root" ;
-                                                                                        runtimeInputs =
-                                                                                            [
-                                                                                                ( config.failure { } )
-                                                                                                (
-                                                                                                    config.sequential
-                                                                                                        {
-                                                                                                            sequential-file = sequential-file ;
-                                                                                                            sequential-lock = sequential-lock ;
-                                                                                                        }
-                                                                                                )
-                                                                                                pkgs.coreutils
-                                                                                            ] ;
+                                                                                        runtime-inputs =
+                                                                                            { config , pkgs , ... } :
+                                                                                                [
+                                                                                                    ( config.failure { } )
+                                                                                                    (
+                                                                                                        config.sequential
+                                                                                                            {
+                                                                                                                sequential-file = sequential-file ;
+                                                                                                                sequential-lock = sequential-lock ;
+                                                                                                            }
+                                                                                                    )
+                                                                                                    pkgs.coreutils
+                                                                                                ] ;
                                                                                         text =
                                                                                             ''
                                                                                                 TARGET="$1"
@@ -51,6 +53,7 @@
                                                                                                 SEQUENCE="$( sequential )" || failure 8686853400084478
                                                                                                 ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX/$SEQUENCE"
                                                                                             '' ;
+                                                                                        variables = { } ;
                                                                                     } ;
                                                                         type = lib.types.functionTo lib.types.package ;
                                                                     } ;
@@ -60,6 +63,7 @@
                                 {
                                     check =
                                         {
+                                            lazy-shell-application ,
                                             failure ,
                                             nixosTest ,
                                             obviated-by ,
@@ -124,7 +128,7 @@
                                                                                                     }
                                                                                             )
                                                                                         ] ;
-                                                                                    imports = [ failure implementation sequential ] ;
+                                                                                    imports = [ failure implementation lazy-shell-application sequential ] ;
                                                                                 } ;
                                                             testScript =
                                                                 ''
