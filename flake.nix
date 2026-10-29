@@ -29,18 +29,15 @@
                                                                                 sequential-file ,
                                                                                 sequential-lock
                                                                             } :
-                                                                                config.lazy-shell-application
+                                                                                pkgs.writeShellApplication
                                                                                     {
-                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
                                                                                         name = "gc-root" ;
-                                                                                        post = null ;
-                                                                                        runtime-inputs =
-                                                                                            { config , pkgs , ... } :
-                                                                                                [
-                                                                                                    ( config.failure { } )
-                                                                                                    ( config.sequential { sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
-                                                                                                    pkgs.coreutils
-                                                                                                ] ;
+                                                                                        runtimeInputs =
+                                                                                            [
+                                                                                                ( config.failure { } )
+                                                                                                ( config.sequential { sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
+                                                                                                pkgs.coreutils
+                                                                                            ] ;
                                                                                         text =
                                                                                             ''
                                                                                                 TARGET="$1"
@@ -48,7 +45,6 @@
                                                                                                 SEQUENCE="$( sequential )" failure 8686853400084478
                                                                                                 ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
                                                                                             '' ;
-                                                                                        variables = { } ;
                                                                                     } ;
                                                                         type = lib.types.functionTo lib.types.package ;
                                                                     } ;
@@ -122,7 +118,7 @@
                                                                                                     }
                                                                                             )
                                                                                         ] ;
-                                                                                    imports = [ failure implementation lazy-shell-application sequential ] ;
+                                                                                    imports = [ failure implementation sequential ] ;
                                                                                 } ;
                                                             testScript =
                                                                 ''
