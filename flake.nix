@@ -106,7 +106,7 @@
                                                                                                         text =
                                                                                                             ''
                                                                                                                 gc-root ${ builtins.toString index } ${ target }
-                                                                                                                if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected ]]
+                                                                                                                if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected } ]]
                                                                                                                 then
                                                                                                                     failure 4155997642417285
                                                                                                                 fi
