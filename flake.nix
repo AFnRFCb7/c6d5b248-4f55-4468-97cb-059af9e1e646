@@ -58,6 +58,7 @@
                                     check =
                                         {
                                             failure ,
+                                            lazy-shell-application ,
                                             nixosTest ,
                                             obviated-by ,
                                             sequential
@@ -120,7 +121,7 @@
                                                                                                     }
                                                                                             )
                                                                                         ] ;
-                                                                                    imports = [ failure implementation sequential ] ;
+                                                                                    imports = [ failure implementation lazy-shell-application sequential ] ;
                                                                                 } ;
                                                             testScript =
                                                                 ''
