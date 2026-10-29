@@ -58,8 +58,10 @@
                                 {
                                     check =
                                         {
+                                            failure ,
                                             nixosTest ,
-                                            obviated-by
+                                            obviated-by ,
+                                            sequential
                                         } :
                                         {
                                             pre-test ,
@@ -91,7 +93,7 @@
                                                                                                     {
                                                                                                         name = "pre-test" ;
                                                                                                         runtimeInputs = [ pkgs.coreutils ] ;
-                                                                                                        text = pre-test ;
+                                                                                                        text = pre-test "/build/sequential.asc" "/build/sequential.lock" ;
                                                                                                     }
                                                                                             )
                                                                                             (
@@ -105,20 +107,26 @@
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
-                                                                                                                gc-root ${ builtins.toString index } ${ target }
+                                                                                                                gc-root ${ builtins.toString index } "${ target }"
                                                                                                                 if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected } ]]
                                                                                                                 then
                                                                                                                     failure 4155997642417285
+                                                                                                                fi
+                                                                                                                FILE="$( readlink ${ target }/${ builtins.toString index }/${ builtins.toString expected } )" || failure 3059492007086999
+                                                                                                                if [[ "$FILE" != "${ target }" ]]
+                                                                                                                then
+                                                                                                                    failure 3606361944478177
                                                                                                                 fi
                                                                                                             '' ;
                                                                                                     }
                                                                                             )
                                                                                         ] ;
-                                                                                    imports = [ implementation ] ;
+                                                                                    imports = [ failure implementation sequential ] ;
                                                                                 } ;
                                                             testScript =
                                                                 ''
                                                                     client.wait_for_unit("multi-user.target")
+                                                                    client.succeed("pre-test")
                                                                     client.succeed("test-script")
                                                                 '' ;
                                                         } ;
