@@ -14,7 +14,7 @@
                                         identified =
                                             if builtins.typeOf input == "lambda" then input module
                                             else if builtins.typeOf input == "null" then module
-                                            else builtins.throw "7620614191526061" ;
+                                            else builtins.throw "6516125758865184" ;
                                         in
                                             with identified ;
                                                 {
@@ -24,22 +24,22 @@
                                                                 lib.mkOption
                                                                     {
                                                                         default =
-                                                                            gc-roots-dir :
-                                                                                config.lazy-shell-application
-                                                                                    {
-                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
-                                                                                        name = "gc-root" ;
-                                                                                        post = null ;
-                                                                                        runtime-inputs = { config , pkgs , ... } : [ ( config.failure { } ) config.sequential pkgs.coreutils ] ;
-                                                                                        text =
-                                                                                            ''
-                                                                                                TARGET="$1"
-                                                                                                mkdir --parents /mounts/gc-root/$INDEX"
-                                                                                                SEQUENCE="$( sequential )" failure 8686853400084478
-                                                                                                ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
-                                                                                            '' ;
-                                                                                    } ;
-                                                                        type = lib.types.functionTo lib.types.package ;
+                                                                            config.lazy-shell-application
+                                                                                {
+                                                                                    mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
+                                                                                    name = "gc-root" ;
+                                                                                    post = null ;
+                                                                                    runtime-inputs = { config , pkgs , ... } : [ ( config.failure { } ) config.sequential pkgs.coreutils ] ;
+                                                                                    text =
+                                                                                        ''
+                                                                                            INDEX=$INDEX
+                                                                                            TARGET="$1"
+                                                                                            mkdir --parents /mounts/gc-root/$INDEX"
+                                                                                            SEQUENCE="$( sequential )" failure 8686853400084478
+                                                                                            ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
+                                                                                        '' ;
+                                                                                } ;
+                                                                        type = lib.types.package ;
                                                                     } ;
                                                         } ;
                                                 } ;
@@ -69,7 +69,7 @@
                                                                         identified =
                                                                             if builtins.typeOf input == "lambda" then input module
                                                                             else if builtins.typeOf input == "null" then module
-                                                                            else builtins.throw "8398410649635682" ;
+                                                                            else builtins.throw "1146402310165249" ;
                                                                         in
                                                                             with identified ;
                                                                                 {
@@ -143,7 +143,7 @@
                                     implementation =
                                         if builtins.typeOf output == "lambda" then output implementation
                                         else if builtins.typeOf output == "null" then implementation
-                                        else builtins.throw "8918826447579212" ;
+                                        else builtins.throw "7073634666273476" ;
                                 } ;
             } ;
 }
