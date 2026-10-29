@@ -35,7 +35,7 @@
                                                                                         runtimeInputs =
                                                                                             [
                                                                                                 ( config.failure { } )
-                                                                                                ( config.sequential { sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
+                                                                                                ( config.sequential { sequential-file = sequential-file ; sequential-lock-1 = sequential-lock-2 ; } )
                                                                                                 pkgs.coreutils
                                                                                             ] ;
                                                                                         text =
