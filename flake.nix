@@ -43,7 +43,6 @@
                                                                                                 ] ;
                                                                                         text =
                                                                                             ''
-                                                                                                INDEX=$INDEX
                                                                                                 TARGET="$1"
                                                                                                 mkdir --parents /mounts/gc-root/$INDEX"
                                                                                                 SEQUENCE="$( sequential )" failure 8686853400084478
