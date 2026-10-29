@@ -49,7 +49,7 @@
                                                                                                 TARGET="$1"
                                                                                                 mkdir --parents "/mounts/gc-root/$INDEX"
                                                                                                 SEQUENCE="$( sequential )" || failure 8686853400084478
-                                                                                                ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
+                                                                                                ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX/$SEQUENCE"
                                                                                             '' ;
                                                                                     } ;
                                                                         type = lib.types.functionTo lib.types.package ;
