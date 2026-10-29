@@ -31,7 +31,7 @@
                                                                             } :
                                                                                 config.lazy-shell-application
                                                                                     {
-                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" } ; } ;
+                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
                                                                                         name = "gc-root" ;
                                                                                         runtime-inputs =
                                                                                             { config , pkgs , ... } :
