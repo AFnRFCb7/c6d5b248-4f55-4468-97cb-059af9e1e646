@@ -24,21 +24,32 @@
                                                                 lib.mkOption
                                                                     {
                                                                         default =
-                                                                            config.lazy-shell-application
-                                                                                {
-                                                                                    mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
-                                                                                    name = "gc-root" ;
-                                                                                    post = null ;
-                                                                                    runtime-inputs = { config , pkgs , ... } : [ ( config.failure { } ) config.sequential pkgs.coreutils ] ;
-                                                                                    text =
-                                                                                        ''
-                                                                                            INDEX=$INDEX
-                                                                                            TARGET="$1"
-                                                                                            mkdir --parents /mounts/gc-root/$INDEX"
-                                                                                            SEQUENCE="$( sequential )" failure 8686853400084478
-                                                                                            ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
-                                                                                        '' ;
-                                                                                } ;
+                                                                            {
+                                                                                gc-roots-dir ,
+                                                                                sequential-file ,
+                                                                                sequential-lock
+                                                                            } :
+                                                                                config.lazy-shell-application
+                                                                                    {
+                                                                                        mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
+                                                                                        name = "gc-root" ;
+                                                                                        post = null ;
+                                                                                        runtime-inputs =
+                                                                                            { config , pkgs , ... } :
+                                                                                                [
+                                                                                                    ( config.failure { } )
+                                                                                                    ( config.sequential { sequential-file = sequential-file ; sequential-lock = sequential-lock ; } )
+                                                                                                    pkgs.coreutils
+                                                                                                ] ;
+                                                                                        text =
+                                                                                            ''
+                                                                                                INDEX=$INDEX
+                                                                                                TARGET="$1"
+                                                                                                mkdir --parents /mounts/gc-root/$INDEX"
+                                                                                                SEQUENCE="$( sequential )" failure 8686853400084478
+                                                                                                ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
+                                                                                            '' ;
+                                                                                    } ;
                                                                         type = lib.types.package ;
                                                                     } ;
                                                         } ;
@@ -49,6 +60,10 @@
                                         {
                                             nixosTest ,
                                             obviated-by
+                                        } :
+                                        {
+                                            pre-test ,
+                                            expected
                                         } :
                                         {
                                             index ,
@@ -74,25 +89,27 @@
                                                                                             (
                                                                                                 pkgs.writeShellApplication
                                                                                                     {
+                                                                                                        name = "pre-test" ;
+                                                                                                        runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                                        text = pre-test ;
+                                                                                                    }
+                                                                                            )
+                                                                                            (
+                                                                                                pkgs.writeShellApplication
+                                                                                                    {
                                                                                                         name = "test-script" ;
                                                                                                         runtimeInputs =
                                                                                                             [
-                                                                                                                pkgs.coreutils
-                                                                                                                pkgs.diffutils
-                                                                                                                pkgs.jq
-                                                                                                                (
-                                                                                                                    config.failure
-                                                                                                                        {
-                                                                                                                            compile-time-arguments = compile-time-arguments ;
-                                                                                                                            planned-error = planned-error ;
-                                                                                                                            unplanned-error = unplanned-error ;
-                                                                                                                        }
-                                                                                                                )
+                                                                                                                ( config.failure { } )
+                                                                                                                config.gc-root
                                                                                                             ] ;
                                                                                                         text =
                                                                                                             ''
                                                                                                                 gc-root ${ builtins.toString index } ${ target }
-
+                                                                                                                if [[ ! -L ${ target }/${ builtins.toString index }/${ builtins.toString expected ]]
+                                                                                                                then
+                                                                                                                    failure 4155997642417285
+                                                                                                                fi
                                                                                                             '' ;
                                                                                                     }
                                                                                             )
