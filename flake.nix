@@ -48,6 +48,7 @@
                                                                                                 SEQUENCE="$( sequential )" failure 8686853400084478
                                                                                                 ln --symbolic "$TARGET" "/mounts/gc-roots/$INDEX"
                                                                                             '' ;
+                                                                                        variables = { } ;
                                                                                     } ;
                                                                         type = lib.types.functionTo lib.types.package ;
                                                                     } ;
