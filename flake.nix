@@ -55,7 +55,6 @@
                                     check =
                                         {
                                             failure ,
-                                            lazy-shell-application ,
                                             nixosTest ,
                                             obviated-by ,
                                             sequential
