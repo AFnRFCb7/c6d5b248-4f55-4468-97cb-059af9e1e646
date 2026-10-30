@@ -65,7 +65,34 @@
                                     check =
                                         {
                                             lazy-shell-application ,
-                                            failure ,
+                                            failure ?
+                                                { pkgs , ... } @module :
+                                                    let
+                                                        identified =
+                                                            if builtins.typeOf input == "lambda" then input module
+                                                            else if builtins.typeOf input == "null" then module
+                                                            else builtins.throw "3089158225937633" ;
+                                                        in
+                                                            with identified ;
+                                                                {
+                                                                    options.failure =
+                                                                        lib.mkOption
+                                                                            {
+                                                                                default =
+                                                                                    ignore :
+                                                                                        pkgs.writeShellApplication
+                                                                                            {
+                                                                                                name = "failure" ;
+                                                                                                runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                                text =
+                                                                                                    ''
+                                                                                                        cat "$@" >&2
+                                                                                                        exit 165
+                                                                                                    '' ;
+                                                                                            } ;
+                                                                                type = lib.types.functionTo lib.types.package ;
+                                                                            } ;
+                                                                } ,
                                             nixosTest ,
                                             obviated-by ,
                                             sequential
