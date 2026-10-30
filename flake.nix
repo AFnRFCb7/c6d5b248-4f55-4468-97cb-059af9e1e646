@@ -33,6 +33,7 @@
                                                                                     {
                                                                                         mounts = { gc-roots = { source = gc-roots-dir ; type = "bind" ; } ; } ;
                                                                                         name = "gc-root" ;
+                                                                                        post = null ;
                                                                                         runtime-inputs =
                                                                                             { config , pkgs , ... } :
                                                                                                 [
